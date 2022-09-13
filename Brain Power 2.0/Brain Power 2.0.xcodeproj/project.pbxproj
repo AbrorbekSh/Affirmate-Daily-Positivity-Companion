@@ -7,14 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2129726E28895A40007BA80E /* AttitudeStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2129726D28895A40007BA80E /* AttitudeStruct.swift */; };
 		2129727028898E09007BA80E /* CounterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2129726F28898E09007BA80E /* CounterViewController.swift */; };
+		212BEC3C28C9C39D00DDE7BE /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 212BEC3A28C9C39D00DDE7BE /* DataModel.xcdatamodeld */; };
+		212BEC6128CC859F00DDE7BE /* EditAttitudeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212BEC6028CC859F00DDE7BE /* EditAttitudeViewController.swift */; };
 		2130AA2D2887E41100F4F2F1 /* NewAttitudeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2130AA2C2887E41100F4F2F1 /* NewAttitudeViewController.swift */; };
 		21333312288AD7BD00939728 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21333311288AD7BD00939728 /* Montserrat-Regular.ttf */; };
 		21333314288AD7CE00939728 /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21333313288AD7CE00939728 /* Montserrat-SemiBold.ttf */; };
 		21333316288AD7DA00939728 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21333315288AD7DA00939728 /* Montserrat-Bold.ttf */; };
 		21430E35288B0B110086AC22 /* NSObjectExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21430E34288B0B110086AC22 /* NSObjectExtensions.swift */; };
 		21430E37288BBC5E0086AC22 /* Montserrat-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21430E36288BBC5E0086AC22 /* Montserrat-Medium.ttf */; };
+		215ADC5728CF10A6002D75BB /* HapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215ADC5628CF10A6002D75BB /* HapticsManager.swift */; };
 		215E8A0228851B220013080A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215E8A0128851B220013080A /* AppDelegate.swift */; };
 		215E8A0428851B220013080A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215E8A0328851B220013080A /* SceneDelegate.swift */; };
 		215E8A0B28851B230013080A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 215E8A0A28851B230013080A /* Assets.xcassets */; };
@@ -25,14 +27,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2129726D28895A40007BA80E /* AttitudeStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttitudeStruct.swift; sourceTree = "<group>"; };
 		2129726F28898E09007BA80E /* CounterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterViewController.swift; sourceTree = "<group>"; };
+		212BEC3B28C9C39D00DDE7BE /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		212BEC6028CC859F00DDE7BE /* EditAttitudeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAttitudeViewController.swift; sourceTree = "<group>"; };
 		2130AA2C2887E41100F4F2F1 /* NewAttitudeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAttitudeViewController.swift; sourceTree = "<group>"; };
 		21333311288AD7BD00939728 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
 		21333313288AD7CE00939728 /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
 		21333315288AD7DA00939728 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.ttf"; sourceTree = "<group>"; };
 		21430E34288B0B110086AC22 /* NSObjectExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSObjectExtensions.swift; sourceTree = "<group>"; };
 		21430E36288BBC5E0086AC22 /* Montserrat-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Medium.ttf"; sourceTree = "<group>"; };
+		215ADC5628CF10A6002D75BB /* HapticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsManager.swift; sourceTree = "<group>"; };
 		215E89FE28851B220013080A /* Brain Power 2.0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Brain Power 2.0.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		215E8A0128851B220013080A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		215E8A0328851B220013080A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -58,7 +62,6 @@
 		2129726C28895A27007BA80E /* Module */ = {
 			isa = PBXGroup;
 			children = (
-				2129726D28895A40007BA80E /* AttitudeStruct.swift */,
 			);
 			path = Module;
 			sourceTree = "<group>";
@@ -100,6 +103,7 @@
 				215E8A15288520070013080A /* Controllers */,
 				215E8A0128851B220013080A /* AppDelegate.swift */,
 				215E8A0328851B220013080A /* SceneDelegate.swift */,
+				212BEC3A28C9C39D00DDE7BE /* DataModel.xcdatamodeld */,
 				215E8A0A28851B230013080A /* Assets.xcassets */,
 				215E8A0C28851B230013080A /* LaunchScreen.storyboard */,
 				215E8A0F28851B230013080A /* Info.plist */,
@@ -113,6 +117,7 @@
 				215E8A16288521660013080A /* AttitudesViewController.swift */,
 				2130AA2C2887E41100F4F2F1 /* NewAttitudeViewController.swift */,
 				2129726F28898E09007BA80E /* CounterViewController.swift */,
+				212BEC6028CC859F00DDE7BE /* EditAttitudeViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -130,6 +135,7 @@
 			children = (
 				215E8A24288544800013080A /* ColorExtension.swift */,
 				21430E34288B0B110086AC22 /* NSObjectExtensions.swift */,
+				215ADC5628CF10A6002D75BB /* HapticsManager.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -208,14 +214,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2129726E28895A40007BA80E /* AttitudeStruct.swift in Sources */,
+				212BEC3C28C9C39D00DDE7BE /* DataModel.xcdatamodeld in Sources */,
 				215E8A222885423C0013080A /* AttitudesTableViewCell.swift in Sources */,
 				2130AA2D2887E41100F4F2F1 /* NewAttitudeViewController.swift in Sources */,
 				215E8A0228851B220013080A /* AppDelegate.swift in Sources */,
+				215ADC5728CF10A6002D75BB /* HapticsManager.swift in Sources */,
 				215E8A25288544800013080A /* ColorExtension.swift in Sources */,
 				2129727028898E09007BA80E /* CounterViewController.swift in Sources */,
 				21430E35288B0B110086AC22 /* NSObjectExtensions.swift in Sources */,
 				215E8A17288521660013080A /* AttitudesViewController.swift in Sources */,
+				212BEC6128CC859F00DDE7BE /* EditAttitudeViewController.swift in Sources */,
 				215E8A0428851B220013080A /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -355,8 +363,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7MJTTLBM2G;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Brain Power 2.0/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Сила подсознания";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -381,8 +391,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7MJTTLBM2G;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Brain Power 2.0/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Сила подсознания";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -422,6 +434,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		212BEC3A28C9C39D00DDE7BE /* DataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				212BEC3B28C9C39D00DDE7BE /* DataModel.xcdatamodel */,
+			);
+			currentVersion = 212BEC3B28C9C39D00DDE7BE /* DataModel.xcdatamodel */;
+			path = DataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 215E89F628851B220013080A /* Project object */;
 }

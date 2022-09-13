@@ -1,17 +1,26 @@
 import UIKit
+import CoreData
 
 class Attitudes{
-    static var attitudes: [AttitudeStruct] = []
+    static var attitudes: [Attitude] = []
 }
 
 final class AttitudesViewController: UIViewController {
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = .white
         setupView()
+        
+        let request : NSFetchRequest<Attitude> = Attitude.fetchRequest()
+        do {
+            Attitudes.attitudes = try context.fetch(request)
+        } catch {
+            print("Error fetching data from context \(error)")
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -20,11 +29,16 @@ final class AttitudesViewController: UIViewController {
         activateLayout()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+            configureNavBar()
+    }
+    
     // MARK: - Layout
     
     private func setupView() {
+        
         addSubviews()
-        configureNavBar()
         configureTableView()
         configureButtons()
     }
@@ -47,16 +61,18 @@ final class AttitudesViewController: UIViewController {
     }
     
     private func configureNavBar(){
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Montserrat-SemiBold", size: 25)!]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Montserrat-SemiBold", size: 25)!, NSAttributedString.Key.foregroundColor: UIColor.black]
+        navigationController?.navigationBar.tintColor = .black
         
-        title = "Attitudes"
-        let image = UIImage(systemName: "list.bullet")?.withTintColor(.black, renderingMode: .alwaysOriginal)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
-        
-        let image2 = UIImage(systemName: "gearshape")?.withTintColor(.black, renderingMode: .alwaysOriginal)
-        navigationItem.rightBarButtonItems = [
-            UIBarButtonItem(image: image2, style: .done, target: self, action: nil)
-        ]
+        title = "Установки"
+
+//        let image = UIImage(systemName: "list.bullet")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+//        navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
+//        
+//        let image2 = UIImage(systemName: "gearshape")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+//        navigationItem.rightBarButtonItems = [
+//            UIBarButtonItem(image: image2, style: .done, target: self, action: nil)
+//        ]
     }
     
     private func activateLayout(){
@@ -77,6 +93,7 @@ final class AttitudesViewController: UIViewController {
         table.showsVerticalScrollIndicator = false
         table.separatorStyle = .none
         table.register(CustomTableViewCell.self, forCellReuseIdentifier: CustomTableViewCell.identifier)
+        table.backgroundColor = .white
         
         return table
      }()
@@ -108,14 +125,46 @@ final class AttitudesViewController: UIViewController {
 }
 
 extension AttitudesViewController: UITableViewDataSource, UITableViewDelegate{
-
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") {
+            (action, sourceView, completionHandler) in
+            self.context.delete(Attitudes.attitudes[indexPath.row])
+            Attitudes.attitudes.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            do{
+                try self.context.save()
+            } catch {
+                print("Error with \(error)")
+            }
+            completionHandler(true)
+        }
+        deleteAction.image = UIImage(systemName: "trash")
+        
+        let editAction = UIContextualAction(style: .normal, title: "Изменить") {
+            (action, sourceView, completionHandler) in
+            // 1. Segue to Edit view MUST PASS INDEX PATH as Sender to the prepareSegue function
+            let vc = EditAttitudeViewController(header: Attitudes.attitudes[indexPath.row].header!, attitude: Attitudes.attitudes[indexPath.row].attitude!, counter: Int(Attitudes.attitudes[indexPath.row].counter), indexPath: indexPath.row)
+            vc.delegate = self
+            let nav = UINavigationController(rootViewController: vc)
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true, completion: nil)
+            completionHandler(true)
+        }
+        editAction.image = UIImage(systemName: "pencil")
+        editAction.backgroundColor = .systemOrange
+        let swipeConfiguration = UISwipeActionsConfiguration(actions: [ deleteAction, editAction])
+        // Delete should not delete automatically
+        swipeConfiguration.performsFirstActionWithFullSwipe = false
+        return swipeConfiguration
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return Attitudes.attitudes.count
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let counterViewController = CounterViewController(attitude: Attitudes.attitudes[indexPath.row].attitude, header: Attitudes.attitudes[indexPath.row].header, aim: Attitudes.attitudes[indexPath.row].counter)
+        let counterViewController = CounterViewController(attitude: Attitudes.attitudes[indexPath.row].attitude!, header: Attitudes.attitudes[indexPath.row].header!, aim: Int(Attitudes.attitudes[indexPath.row].counter))
         navigationItem.backBarButtonItem?.title = ""
         navigationController?.pushViewController(counterViewController, animated: true)
     }
@@ -130,6 +179,7 @@ extension AttitudesViewController: UITableViewDataSource, UITableViewDelegate{
                 return UITableViewCell()
             }
         cell.headerLabel.text = Attitudes.attitudes[indexPath.row].header
+        cell.backgroundColor = .white
         cell.layer.cornerRadius = cell.frame.height/4.0
         cell.selectionStyle = .none
         return cell
@@ -147,4 +197,11 @@ extension AttitudesViewController: UpdateTableViewProtocol {
         attitudesTableView.reloadData()
     }
 }
+
+extension AttitudesViewController: UpdateTableViewAfterEditProtocol {
+    func updateTableViewAfterEdit() {
+        attitudesTableView.reloadData()
+    }
+}
+
 

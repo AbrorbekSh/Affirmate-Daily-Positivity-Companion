@@ -30,11 +30,11 @@ class CounterViewController: UIViewController {
         view.layer.addSublayer(gradient)
         configureNavBar()
         
-        if defaults.object(forKey: "\(attitude)") == nil {
-            defaults.set(counter, forKey: "\(attitude)")
+        if defaults.object(forKey: "\(attitude)"+"\(header)"+"\(aim)") == nil {
+            defaults.set(counter, forKey: "\(attitude)"+"\(header)"+"\(aim)")
             completedLabel.isHidden = true
         } else {
-            counter = defaults.integer(forKey: "\(attitude)")
+            counter = defaults.integer(forKey: "\(attitude)"+"\(header)"+"\(aim)")
             if counter < aim {
                 completedLabel.isHidden = true
             } else {
@@ -50,6 +50,10 @@ class CounterViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         activateLayout()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Montserrat-SemiBold", size: 20)!, NSAttributedString.Key.foregroundColor: UIColor.white]
     }
     
     // MARK: - Layout
@@ -83,12 +87,12 @@ class CounterViewController: UIViewController {
     private func activateLayout(){
         NSLayoutConstraint.activate([
             plusButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
-            plusButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -120),
+            plusButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -view.bounds.size.height/5 + 70),
             plusButton.heightAnchor.constraint(equalToConstant: 160),
             plusButton.widthAnchor.constraint(equalToConstant: 160),
             
             minusButton.trailingAnchor.constraint(equalTo: plusButton.leadingAnchor, constant: -50),
-            minusButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -160),
+            minusButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -view.bounds.size.height/5 + 20 ),
             minusButton.heightAnchor.constraint(equalToConstant: 75),
             minusButton.widthAnchor.constraint(equalToConstant: 75),
 
@@ -101,9 +105,9 @@ class CounterViewController: UIViewController {
             counterLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             counterLabel.heightAnchor.constraint(equalToConstant: 120),
             
-            attitudeTextLabel.bottomAnchor.constraint(equalTo: counterLabel.topAnchor, constant: -70),
+            attitudeTextLabel.bottomAnchor.constraint(equalTo: counterLabel.topAnchor, constant: -view.bounds.size.height/10),
             attitudeTextLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            attitudeTextLabel.heightAnchor.constraint(equalToConstant: 200),
+            attitudeTextLabel.heightAnchor.constraint(equalToConstant: view.bounds.size.height/3 - 80),
             attitudeTextLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
             aimLabel.bottomAnchor.constraint(equalTo: plusButton.topAnchor, constant: -20),
@@ -144,7 +148,7 @@ class CounterViewController: UIViewController {
     
     private let completedLabel: UILabel = {
         let label = UILabel()
-        label.text = "Completed!"
+        label.text = "Завершено!"
         label.font = UIFont(name: "Montserrat-Bold", size: 40)
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -216,7 +220,12 @@ class CounterViewController: UIViewController {
             if counter >= aim {
                 completedLabel.isHidden = false
             }
-            defaults.set(counter, forKey: "\(attitude)")
+            if counter == aim {
+                HapticsManager.shared.vibrate(for: .success)
+            } else{
+                HapticsManager.shared.selectionVibrate()
+            }
+            defaults.set(counter, forKey: "\(attitude)"+"\(header)"+"\(aim)")
         }
     }
     
@@ -227,14 +236,16 @@ class CounterViewController: UIViewController {
             if counter < aim {
                 completedLabel.isHidden = true
             }
-            defaults.set(counter, forKey: "\(attitude)")
+            defaults.set(counter, forKey: "\(attitude)"+"\(header)"+"\(aim)")
+        } else {
+            HapticsManager.shared.vibrate(for: .error)
         }
     }
     
     @objc private func refreshCounter(){
         counter = 0
         completedLabel.isHidden = true
-        defaults.set(counter, forKey: "\(attitude)")
+        defaults.set(counter, forKey: "\(attitude)"+"\(header)"+"\(aim)")
         counterLabel.text = "\(counter)"
     }
 }

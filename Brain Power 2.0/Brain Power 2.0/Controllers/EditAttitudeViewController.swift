@@ -2,15 +2,30 @@
 import UIKit
 import CoreData
 
-protocol UpdateTableViewProtocol: AnyObject{
-    func updateTableView()
+protocol UpdateTableViewAfterEditProtocol: AnyObject{
+    func updateTableViewAfterEdit()
 }
 
-final class NewAttitudeViewController: UIViewController {
+final class EditAttitudeViewController: UIViewController {
     
     // MARK: - Properties
+    let header: String
+    let attitude: String
+    let counter: Int
+    let indexPath: Int
+    init(header: String, attitude: String, counter: Int, indexPath: Int){
+        self.header = header
+        self.attitude = attitude
+        self.counter = counter
+        self.indexPath = indexPath
+        super.init(nibName: nil, bundle: nil)
+    }
     
-    weak var delegate: UpdateTableViewProtocol?
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    weak var delegate: UpdateTableViewAfterEditProtocol?
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     // MARK: - Lifecycle
@@ -54,7 +69,7 @@ final class NewAttitudeViewController: UIViewController {
     
     private func configureNavBar(){
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Montserrat-SemiBold", size: 25)!, NSAttributedString.Key.foregroundColor: UIColor.black]
-        title = "Новая установка"
+        title = "Изменить"
         
         let image = UIImage(systemName: "xmark")?.withTintColor(.black, renderingMode: .alwaysOriginal)
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: #selector(dismissButton))
@@ -116,6 +131,11 @@ final class NewAttitudeViewController: UIViewController {
             attitudeTextView.layer.borderWidth = 0.5
         }
         
+        if attitudeTextView.text == "" {
+            attitudeTextView.layer.borderColor = UIColor.systemRed.cgColor
+            attitudeTextView.layer.borderWidth = 0.5
+        }
+        
         if counterTextField.text == "" {
             counterTextField.layer.borderColor = UIColor.systemRed.cgColor
             counterTextField.layer.borderWidth = 0.5
@@ -126,18 +146,21 @@ final class NewAttitudeViewController: UIViewController {
             headerTextField.layer.borderWidth = 0.5
         }
         
-        if attitudeTextView.textColor != .lightGray && counterTextField.text != "" && headerTextField.text != ""{
+        if attitudeTextView.textColor != .lightGray && attitudeTextView.text != "" && counterTextField.text != "" && headerTextField.text != ""{
             let newAttitude = Attitude(context: context)
             newAttitude.header = headerTextField.text!
             newAttitude.counter = Int16(Int32(Int(counterTextField.text!)!))
             newAttitude.attitude = attitudeTextView.text!
+            
+            context.delete(Attitudes.attitudes[indexPath])
+            Attitudes.attitudes.remove(at: indexPath)
+            Attitudes.attitudes.insert(newAttitude, at: indexPath)
             do{
                 try context.save()
             } catch {
                 print("Error with \(error)")
             }
-            Attitudes.attitudes.append(newAttitude)
-            delegate?.updateTableView()
+            delegate?.updateTableViewAfterEdit()
             dismiss(animated: true)
         }
         
@@ -160,17 +183,18 @@ final class NewAttitudeViewController: UIViewController {
         return label
     }()
     
-    private let headerTextField: UITextField = {
+    private lazy var headerTextField: UITextField = {
         let text = UITextField()
         text.translatesAutoresizingMaskIntoConstraints = false
-//        text.placeholder = "Например: Карьера"
+        
+        text.text = "\(header)"
         text.attributedPlaceholder = NSAttributedString(
             string: "Например: Карьера",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray]
         )
+        text.textColor = .black
         text.font = UIFont(name: "Montserrat-Regular", size: 20)
         text.backgroundColor = UIColor(hexString: "f4f4f4")
-        text.textColor = .black
         text.layer.cornerRadius = 4
         
         return text
@@ -187,13 +211,13 @@ final class NewAttitudeViewController: UIViewController {
         return label
     }()
     
-    private let attitudeTextView: UITextView = {
+    private lazy var attitudeTextView: UITextView = {
         let text = UITextView()
         text.translatesAutoresizingMaskIntoConstraints = false
         
         text.backgroundColor = .white
-        text.textColor = .lightGray
-        text.text = "Например: Я рада, что стала начальником отдела аренды."
+        text.textColor = .black
+        text.text = "\(attitude)"
         text.font = UIFont(name: "Montserrat-Regular", size: 20)
         text.backgroundColor = UIColor(hexString: "f4f4f4")
         text.layer.cornerRadius = 4
@@ -213,15 +237,16 @@ final class NewAttitudeViewController: UIViewController {
         return label
     }()
     
-    private let counterTextField: UITextField = {
+    private lazy var counterTextField: UITextField = {
         let text = UITextField()
         text.translatesAutoresizingMaskIntoConstraints = false
-
+        
         text.textColor = .black
         text.attributedPlaceholder = NSAttributedString(
             string: "100",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray]
         )
+        text.text = "\(counter)"
         text.font = UIFont(name: "Montserrat-Regular", size: 25)
         text.backgroundColor = UIColor(hexString: "f4f4f4")
         text.layer.cornerRadius = 4
@@ -248,7 +273,7 @@ final class NewAttitudeViewController: UIViewController {
 
 // MARK: - UITextViewDelegate
 
-extension NewAttitudeViewController: UITextViewDelegate {
+extension EditAttitudeViewController: UITextViewDelegate {
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         
@@ -279,7 +304,7 @@ extension NewAttitudeViewController: UITextViewDelegate {
 
 // MARK: - UITextFieldDelegate
 
-extension NewAttitudeViewController: UITextFieldDelegate {
+extension EditAttitudeViewController: UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
